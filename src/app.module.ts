@@ -3,9 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CiudadModule } from './ciudad/ciudad.module';
-import { ClaseModule } from './clase/clase.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { EscuelaModule } from './escuela/escuela.module';
+import { ClasesModule } from './clases/clases.module';
+import { AsistenciaModule } from './asistencia/asistencia.module';
+import { EstudianteModule } from './estudiante/estudiante.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -19,10 +21,12 @@ import { EscuelaModule } from './escuela/escuela.module';
     "synchronize": true //modo desarrollador.
 
   }),
-  CiudadModule,
-  ClaseModule,
+  CiudadModule,  
   ProfesorModule,
-  EscuelaModule
+  EscuelaModule,
+  ClasesModule,
+  AsistenciaModule,
+  EstudianteModule
 ],
   controllers: [AppController],
   providers: [AppService],
