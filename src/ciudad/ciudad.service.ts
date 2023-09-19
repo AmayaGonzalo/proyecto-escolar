@@ -65,16 +65,49 @@ export class CiudadService {
     }
 
     async update(ciudadDto: CiudadDto, id: number) : Promise<String>{
-        const criterio : FindOneOptions = { where:{ id : id}};
-        let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+        try{
+            const criterio : FindOneOptions = { where:{ id : id}};
+            let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
         
-        if(!ciudad)
-            throw new Error('No se pudo encontrar la ciudad a modificar');        
-        else{
-            let ciudadVieja = ciudad.getNombre();
-            ciudad.setNombre(ciudadDto.nombre);
-            ciudad = await this.ciudadRepository.save(ciudad);
-            return `OK - ${ciudadVieja} --> ${ciudadDto.nombre}`;
+            if(!ciudad)
+                throw new Error('No se pudo encontrar la ciudad a modificar');        
+            else{
+                let ciudadVieja = ciudad.getNombre();
+                ciudad.setNombre(ciudadDto.nombre);
+                ciudad = await this.ciudadRepository.save(ciudad);
+                return `OK - ${ciudadVieja} --> ${ciudadDto.nombre}`;
+            }            
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.CONFLICT,
+                error: 'Error en ciudad - ' + error
+
+            },HttpStatus.NOT_FOUND)
+        }        
+    }
+
+    async delete(id: number): Promise<any>{
+        try{
+            let criterio : FindOneOptions = { where: { id : id}};
+            let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+            if(!ciudad)
+                throw new Error('No se pudo eliminar la ciudad');
+            else{
+                await this.ciudadRepository.remove(ciudad);
+                return {
+                        id: id,
+                        nombre: ciudad.getNombre(),
+                        message: 'se ha eliminado exitosamente'
+                        }
+            }
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.CONFLICT,
+                error: 'Error en ciudad - ' + error
+
+            },HttpStatus.NOT_FOUND)
         }
     }
 

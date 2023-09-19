@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { CiudadService } from './ciudad.service';
 import { Ciudad } from './entities/ciudad.entity';
 import { CiudadDto } from './dto/ciudad.dto';
@@ -31,6 +31,11 @@ export class CiudadController {
     @Put('actualizar/:id')
     async actualizarCiudadId(@Body() ciudadDto, @Param('id') id: number): Promise<String>{
         return await this.ciudadService.update(ciudadDto, id);
+    }
+
+    @Delete('eliminar/:id')
+    async eliminarciudad(@Param('id') id: number): Promise<any>{
+        return await this.ciudadService.delete(id);
     }
 
 }
