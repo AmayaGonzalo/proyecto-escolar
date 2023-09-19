@@ -1,9 +1,9 @@
-import { IsNotEmpty, IsString } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { IsNotEmpty, IsString } from "class-validator"
 
-@Entity({ name: 'profesor' })
-export class Profesor {
-
+@Entity({ name: 'escuela' })
+export class Escuela {
+    
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -14,12 +14,11 @@ export class Profesor {
 
     @Column()
     @IsString()
-    @IsNotEmpty()
-    apellido: string;
+    domicilio: string;
 
-    constructor(nombre: string, apellido: string){
+    constructor(nombre: string, domicilio: string){
+        this.domicilio = domicilio;
         this.nombre = nombre;
-        this.apellido = apellido;
     }
 
     public getId(): number{
@@ -30,17 +29,15 @@ export class Profesor {
         return this.nombre;
     }
 
-    public getApellido(): string{
-        return this.apellido;
+    public getDomicilio(): string{
+        return this.domicilio;
     }
 
     public setNombre(nombre: string): void{
         this.nombre = nombre;
     }
     
-    public setApellido(apellido: string):void{
-        this.apellido = apellido;
+    public setDomicilio(domicilio: string):void{
+        this.domicilio = domicilio;
     }
 }
-
-
