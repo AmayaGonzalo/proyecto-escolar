@@ -29,8 +29,8 @@ export class CiudadController {
     }
 
     @Put('actualizar/:id')
-    async actualizarCiudadId(@Body() ciudadDto, @Param('id') id: number){
-        return await this.ciudadService.update(ciudadDto);
+    async actualizarCiudadId(@Body() ciudadDto, @Param('id') id: number): Promise<String>{
+        return await this.ciudadService.update(ciudadDto, id);
     }
 
 }

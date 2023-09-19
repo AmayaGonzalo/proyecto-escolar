@@ -64,6 +64,20 @@ export class CiudadService {
         }
     }
 
+    async update(ciudadDto: CiudadDto, id: number) : Promise<String>{
+        const criterio : FindOneOptions = { where:{ id : id}};
+        let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+        
+        if(!ciudad)
+            throw new Error('No se pudo encontrar la ciudad a modificar');        
+        else{
+            let ciudadVieja = ciudad.getNombre();
+            ciudad.setNombre(ciudadDto.nombre);
+            ciudad = await this.ciudadRepository.save(ciudad);
+            return `OK - ${ciudadVieja} --> ${ciudadDto.nombre}`;
+        }
+    }
+
 
 
 
