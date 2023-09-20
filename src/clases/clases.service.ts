@@ -12,15 +12,15 @@ export class ClasesService {
     ){}
 
 
-  async create(claseDto: Clase): Promise<boolean>{
+  async create(claseDto: Clase): Promise<Clase>{
     // let clase: Clase = new Clase(claseDto.nombre);
     // await this.claseRepository.save(clase);
     try{
       let clase : Clase = await this.claseRepository.save(new Clase(claseDto.nombre));//lo mismo que las dos lineas comentadas de arriba
       if(clase)
-        return true;
-      else
-        throw new Error('No se pudo crear la clase');
+        return clase;
+    else
+      throw new Error('No se pudo crear la clase');
     }
     catch(error){
       throw new HttpException({
@@ -79,16 +79,20 @@ export class ClasesService {
     }     
   }
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: number): Promise<any> {
     try{
       const criterio : FindOneOptions = { where: { id : id }};
-    let clase : Clase = await this.claseRepository.findOne(criterio);
-    if(clase){
-      await this.claseRepository.remove(clase);
-      return true;      
-    }
-    else
-      throw new Error('No se encontró la clase para eliminar');
+      let clase : Clase = await this.claseRepository.findOne(criterio);
+      if(!clase)
+        throw new Error('No se pudo eliminar la clase');
+      else{
+          await this.claseRepository.remove(clase);
+          return {
+                  id: id,
+                  nombre: clase.getNombre(),
+                  message: 'se ha eliminado exitosamente'
+                  }
+      }
     }
     catch(error){
       throw new HttpException({

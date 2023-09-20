@@ -17,8 +17,9 @@ export class ClasesController {
   }
 
   @Post('crear')
-  async crearClase(@Body() clase: Clase): Promise<boolean>{
+  async crearClase(@Body() clase: Clase): Promise<Clase>{
     return await this.clasesService.create(clase);
+    
   }
 
   @Put('actualizar/:id')
@@ -26,8 +27,8 @@ export class ClasesController {
     return await this.clasesService.update(id, clase);
   }
 
-  @Delete('eliminar')
-  async eliminarId(@Param()id: number): Promise<boolean>{
+  @Delete('eliminar/:id')
+  async eliminarClase(@Param('id')id: number): Promise<any>{
     return await this.clasesService.remove(id);
   }
 }

@@ -89,7 +89,7 @@ export class CiudadService {
 
     async delete(id: number): Promise<any>{
         try{
-            let criterio : FindOneOptions = { where: { id : id}};
+            let criterio : FindOneOptions = { where: { id : id }};
             let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
             if(!ciudad)
                 throw new Error('No se pudo eliminar la ciudad');
