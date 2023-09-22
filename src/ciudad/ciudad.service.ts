@@ -32,7 +32,7 @@ export class CiudadService {
     async findById(id: number) : Promise<CiudadDto>{
         try{
             const criterio: FindOneOptions = { where: {id: id}};
-            let ciudad: Ciudad = await this.ciudadRepository.findOne( criterio );
+            let ciudad: CiudadDto = await this.ciudadRepository.findOne( criterio );
             if(ciudad)
                 return ciudad;
             else
@@ -64,18 +64,47 @@ export class CiudadService {
         }
     }
 
+
+        //Si llega en el UPDATE una ciudadDto
+        // ciudad{
+        //     "id": "1",
+        //     "nombre": "Mar del Plata",
+        //     "habitantes": 12000
+        // }
+
     async update(ciudadDto: CiudadDto, id: number) : Promise<String>{
         try{
             const criterio : FindOneOptions = { where:{ id : id}};
             let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+            //busca en la base de datos y trae una ciudad de "Rio Grande"
+            // ciudad{
+            //     "id": "1",
+            //     "nombre": "Río Grande",
+            //     "habitantes": 98.017
+            // }
         
             if(!ciudad)
                 throw new Error('No se pudo encontrar la ciudad a modificar');        
             else{
-                let ciudadVieja = ciudad.getNombre();
-                ciudad.setNombre(ciudadDto.nombre);
-                ciudad = await this.ciudadRepository.save(ciudad);
-                return `OK - ${ciudadVieja} --> ${ciudadDto.nombre}`;
+                let ciudadVieja = ciudad.getNombre();   //guarda en la variable ciudadVieja el nombre de "Río Grande"   
+                // let habitantesViejo = ciudad.getHabitantes(); //guarda en la variable habitantesViejo los habitantes de "Río Grande"               
+                if(ciudadDto.nombre != null || ciudadDto.nombre != undefined){
+                    ciudad.setNombre(ciudadDto.nombre);     //Cambia el nombre por "Mar del Plata"
+                    ciudad = await this.ciudadRepository.save(ciudad);  //guarda el nombre "Mar del Plata en la Base de datos"
+                    return `OK - ${ciudadVieja} --> ${ciudadDto.nombre}`;
+                }
+                // if(ciudadDto.habitantes != null || ciudadDto.habitantes != undefined){
+                //     ciudad.setHabitantes(ciudadDto.habitantes);     //Cambia habitantes por "12000"
+                //     ciudad = await this.ciudadRepository.save(ciudad);  //guarda habitantes "12000" en la Base de datos"
+                //     return `OK - ${habitantesViejo} --> ${ciudadDto.habitantes}`;
+                // }
+                // if((ciudadDto.nombre != null || ciudadDto.nombre != undefined) && (ciudadDto.habitantes != null || ciudadDto.habitantes != undefined)){
+                //     ciudad.setNombre(ciudadDto.nombre);     //Cambia el nombre por "Mar del Plata"
+                //     ciudad.setHabitantes(ciudadDto.habitantes);     //Cambia habitantes por "12000"
+                //     ciudad = await this.ciudadRepository.save(ciudad);  //guarda el nombre "Mar del Plata en la Base de datos"
+                //     ciudad = await this.ciudadRepository.save(ciudad);  //guarda habitantes "12000" en la Base de datos"
+                //     return `OK - ${ciudadVieja} --> ${ciudadDto.nombre} |--| ${habitantesViejo} --> ${ciudadDto.habitantes}`;
+                // }                  
             }            
         }
         catch(error){

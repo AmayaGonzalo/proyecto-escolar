@@ -16,7 +16,7 @@ export class CiudadController {
     @Get('orm')
     async getAllOrm():Promise<CiudadDto[]>{
         return this.ciudadService.findAllOrm();
-    }
+    } 
 
     @Get(':id')
     async getId(@Param('id')id:number):Promise<CiudadDto>{
