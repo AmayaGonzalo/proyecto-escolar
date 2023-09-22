@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 import { Profesor } from "src/profesor/entities/profesor.entity";
 import { Escuela } from "src/escuela/entities/escuela.entity";
 import { Estudiante } from "src/estudiante/entities/estudiante.entity";
@@ -11,6 +11,7 @@ export class Clase {
     id: number;
 
     @Column()
+    @IsString()
     @IsNotEmpty()
     nombre: string;
 

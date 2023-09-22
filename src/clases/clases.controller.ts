@@ -18,8 +18,7 @@ export class ClasesController {
 
   @Post('crear')
   async crearClase(@Body() clase: Clase): Promise<Clase>{
-    return await this.clasesService.create(clase);
-    
+    return await this.clasesService.create(clase);    
   }
 
   @Put('actualizar/:id')

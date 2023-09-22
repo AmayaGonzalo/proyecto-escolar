@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { IsNotEmpty, IsString } from "class-validator";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { IsDate, IsNotEmpty, IsString } from "class-validator";
 import { Clase } from "src/clases/entities/clase.entity";
+import { CiudadEstudiante } from "src/ciudad/entities/ciudad_estudiante.entity";
 
 @Entity({ name : "estudiantes" })
 export class Estudiante {
@@ -17,12 +18,20 @@ export class Estudiante {
     @IsString()
     apellido: string;
 
+    @Column()
+    @IsDate()
+    fechaNacimiento: Date;
+
     @ManyToMany(()=>Clase, clases=>clases.estudiantes)
     clases: Clase[];
 
-    constructor(nombre:string, apellido:string){
+    @OneToMany(()=>CiudadEstudiante, ciudadEstudiante=>ciudadEstudiante.estudiantes)
+    ciudadEstudiante: CiudadEstudiante[];
+
+    constructor(nombre:string, apellido:string, fechaNacimiento: Date){
         this.nombre = nombre;
         this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public getId(): number{
@@ -37,12 +46,20 @@ export class Estudiante {
         return this.apellido;
     }
 
+    public getFechaNacimiento(): Date{
+        return this.fechaNacimiento;
+    }
+
     public setNombre(nombre: string): void{
         this.nombre = nombre;
     }
 
     public setApellido(apellido: string): void{
         this.apellido = apellido;
+    }
+
+    public setFechaNacimiento(fechaNacimiento: Date): void{
+        this.fechaNacimiento = fechaNacimiento;
     }
 
 }

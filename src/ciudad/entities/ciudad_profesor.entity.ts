@@ -7,7 +7,7 @@ import { Profesor } from "src/profesor/entities/profesor.entity";
 export class CiudadProfesor {
 
 @PrimaryGeneratedColumn()
-id: number;
+idDomicilioProfesor: number;
 
 @Column()
 @IsNotEmpty()
@@ -28,7 +28,7 @@ constructor(direccion:string){
 }
 
 public getId(): number{
-    return this.id;
+    return this.idDomicilioProfesor;
 }
 
 
