@@ -7,9 +7,15 @@ export class EstudianteController {
   constructor(private readonly estudianteService: EstudianteService) {}
 
   @Post('crear')
-  create(@Body() estudianteDto: EstudianteDto): Promise<EstudianteDto> {
+  async create(@Body() estudianteDto: EstudianteDto): Promise<EstudianteDto> {
     return this.estudianteService.create(estudianteDto);
   }
+
+  @Post('crearconrelacion')
+  async createConRelacion(@Body() EstudianteDto: EstudianteDto): Promise <boolean>{
+    return this.estudianteService.createConRelation(EstudianteDto);
+  }
+
 
   @Get()
   findAll() {

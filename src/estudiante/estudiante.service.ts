@@ -3,12 +3,16 @@ import { EstudianteDto } from './dto/create-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
 import { Repository } from 'typeorm';
+import { Clase } from 'src/clases/entities/clase.entity';
 
 @Injectable()
 export class EstudianteService {
 
   constructor(@InjectRepository(Estudiante)
-              private estudianteRepository:Repository<Estudiante>)
+              private estudianteRepository:Repository<Estudiante>,
+              @InjectRepository(Clase)
+              private claseRepository:Repository<Clase>
+              )
   {}
 
   async create(estudianteDto: EstudianteDto): Promise<EstudianteDto> {   
@@ -27,6 +31,19 @@ export class EstudianteService {
         },HttpStatus.NOT_FOUND)
       }  
     }  
+
+    //ver el id harcodeado
+  async createConRelation(estudianteDto: EstudianteDto):Promise<boolean>{
+    const clase:Clase= await this.claseRepository.findOne({ where: {id : 1 } });
+    let estudiante:Estudiante = new Estudiante(estudianteDto.nombre, estudianteDto.apellido, estudianteDto.fechaNacimiento);
+    if(clase)
+      estudiante.clases = [clase];
+      await this.estudianteRepository.save(estudiante);
+    if(estudiante)
+      return true;
+    else
+      return false;
+  }
 
   findAll() {
     return `This action returns all estudiante`;

@@ -12,6 +12,11 @@ export class ProfesorController {
     return this.profesorService.create(createProfesorDto);
   }
 
+  @Post('adddomicilio')
+  async addDomicilio(@Body() body: any): Promise<any> {
+    return this.profesorService.createDomicilio(body);
+  }
+
   @Get()
   findAll() {
     return this.profesorService.findAll();

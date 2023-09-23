@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { IsNotEmpty, IsString } from "class-validator";
 import { Ciudad } from "./ciudad.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
@@ -6,38 +6,36 @@ import { Profesor } from "src/profesor/entities/profesor.entity";
 @Entity({ name: "ciudad_profesor" })
 export class CiudadProfesor {
 
-@PrimaryGeneratedColumn()
-idDomicilioProfesor: number;
+@PrimaryColumn()
+ciudadId: number;
+
+@PrimaryColumn()
+profesorId: number;
 
 @Column()
 @IsNotEmpty()
 @IsString()
-direccion: string;
+domicilio: string;
 
 @ManyToOne(()=>Ciudad, ciudad=>ciudad.CiudadProfesor)
-@JoinColumn({ name: "fk_id_ciudad"})
 ciudad: Ciudad;
 
 @ManyToOne(()=>Profesor, profesor=>profesor.ciudadProfesor)
-@JoinColumn({ name: "fk_id_profesor"})
 profesor: Profesor;
 
 
-constructor(direccion:string){
-    this.direccion = direccion;
+constructor(ciudadId:number, profesorId:number, domicilio:string){
+    this.domicilio = domicilio;
+    this.profesorId = profesorId;
+    this.ciudadId = ciudadId;
 }
-
-public getId(): number{
-    return this.idDomicilioProfesor;
-}
-
 
 public getDirecccion(): string{
-    return this.direccion;
+    return this.domicilio;
 }
 
-public setDireccion(direccion: string):void{
-    this.direccion = direccion;
+public setDireccion(domicilio: string):void{
+    this.domicilio = domicilio;
 }
 
 }
