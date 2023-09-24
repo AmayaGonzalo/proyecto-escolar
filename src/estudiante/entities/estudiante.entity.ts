@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGe
 import { IsDate, IsNotEmpty, IsString } from "class-validator";
 import { Clase } from "src/clases/entities/clase.entity";
 import { CiudadEstudiante } from "src/ciudad/entities/ciudad_estudiante.entity";
+import { EstudianteClase } from "./estudianteClase.entity";
 
 @Entity({ name : "estudiantes" })
 export class Estudiante {
@@ -22,11 +23,14 @@ export class Estudiante {
     @IsDate()
     fechaNacimiento: Date;
 
-    @ManyToMany(()=>Clase, clases=>clases.estudiantes)
-    clases: Clase[];
+    // @ManyToMany(()=>Clase, clases=>clases.estudiantes)
+    // clases: Clase[];
 
     @OneToMany(()=>CiudadEstudiante, ciudadEstudiante=>ciudadEstudiante.estudiante)
     ciudadEstudiante: CiudadEstudiante[];
+
+    @OneToMany(()=>EstudianteClase, estudianteClases=> estudianteClases.estudiante)
+    estudianteClases: EstudianteClase[];
 
     constructor(nombre:string, apellido:string, fechaNacimiento: Date){
         this.nombre = nombre;

@@ -7,20 +7,20 @@ import { Ciudad } from "./ciudad.entity";
 export class CiudadEstudiante{
 
     @PrimaryColumn()
-    estudianteId: number;
+    ciudadId: number;
 
     @PrimaryColumn()
-    ciudadId: number;
+    estudianteId: number;
 
     @Column()
     @IsString()
     direccion: string;
 
-    @ManyToOne(()=>Estudiante, estudiante => estudiante.ciudadEstudiante)
-    estudiante : Estudiante;
-
     @ManyToOne(()=> Ciudad, ciudad=> ciudad.ciudadEstudiante)
     ciudad : Ciudad;
+
+    @ManyToOne(()=>Estudiante, estudiante => estudiante.ciudadEstudiante)
+    estudiante : Estudiante;
 
     constructor(estudianteId:number,ciudadId:number,direccion: string){
         this.estudianteId = estudianteId;

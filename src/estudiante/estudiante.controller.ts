@@ -12,10 +12,14 @@ export class EstudianteController {
   }
 
   @Post('crearconrelacion')
-  async createConRelacion(@Body() EstudianteDto: EstudianteDto): Promise <boolean>{
-    return this.estudianteService.createConRelation(EstudianteDto);
+  async createConRelacion(@Body() body: any): Promise <any>{
+    return this.estudianteService.addClase(body);
   }
 
+  @Post('addclase')
+  async agregarClase(@Body() body: any): Promise <any>{
+    return this.estudianteService.addClase(body);
+  }
 
   @Get()
   findAll() {
