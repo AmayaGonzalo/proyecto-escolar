@@ -38,7 +38,7 @@ export class ProfesorService {
     //si el id_profesor y id_ciudad existe dentro de ciudad_profesor(tabla)
     const newDomicilio = await this.ciudadProfesorRepository.findOne({ where:{ciudadId:ciudadId, profesorId:profesorId}});
     if(newDomicilio)
-      return 'el profesor ya tiene ese domicilio';
+      return 'el profesor ya tiene asignado un domicilio';
     return await this.ciudadProfesorRepository.save(new CiudadProfesor(ciudadId, profesorId, domicilio));
   }
 

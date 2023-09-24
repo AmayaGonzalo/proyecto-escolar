@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { IsNotEmpty, IsString } from "class-validator";
 import { Ciudad } from "./ciudad.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
@@ -17,7 +17,7 @@ profesorId: number;
 @IsString()
 domicilio: string;
 
-@ManyToOne(()=>Ciudad, ciudad=>ciudad.CiudadProfesor)
+@ManyToOne(()=>Ciudad, ciudad=>ciudad.ciudadProfesor)
 ciudad: Ciudad;
 
 @ManyToOne(()=>Profesor, profesor=>profesor.ciudadProfesor)

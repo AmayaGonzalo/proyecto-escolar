@@ -1,32 +1,31 @@
 import { IsString } from "class-validator";
 import { Estudiante } from "src/estudiante/entities/estudiante.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { Ciudad } from "./ciudad.entity";
 
 @Entity({ name: "ciudad_estudiante" })
 export class CiudadEstudiante{
 
-    @PrimaryGeneratedColumn()
-    idDocmicilioEstudiante: number;
+    @PrimaryColumn()
+    estudianteId: number;
+
+    @PrimaryColumn()
+    ciudadId: number;
 
     @Column()
     @IsString()
     direccion: string;
 
-    @ManyToOne(()=>Estudiante, estudiantes => estudiantes.ciudadEstudiante)
-    @JoinColumn({ name : "fk_id_estudiante" })
-    estudiantes : Estudiante;
+    @ManyToOne(()=>Estudiante, estudiante => estudiante.ciudadEstudiante)
+    estudiante : Estudiante;
 
-    @ManyToOne(()=> Ciudad, ciudades=> ciudades.ciudadEstudiante)
-    @JoinColumn({ name: "fk_id_ciudad" })
-    ciudades : Ciudad;
+    @ManyToOne(()=> Ciudad, ciudad=> ciudad.ciudadEstudiante)
+    ciudad : Ciudad;
 
-    constructor(direccion: string){
+    constructor(estudianteId:number,ciudadId:number,direccion: string){
+        this.estudianteId = estudianteId;
+        this.ciudadId = ciudadId;
         this.direccion = direccion;
-    }
-
-    public getId(): number{
-        return this.idDocmicilioEstudiante;
     }
         
     public getDirecccion(): string{

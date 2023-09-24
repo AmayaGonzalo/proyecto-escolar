@@ -25,7 +25,7 @@ export class Estudiante {
     @ManyToMany(()=>Clase, clases=>clases.estudiantes)
     clases: Clase[];
 
-    @OneToMany(()=>CiudadEstudiante, ciudadEstudiante=>ciudadEstudiante.estudiantes)
+    @OneToMany(()=>CiudadEstudiante, ciudadEstudiante=>ciudadEstudiante.estudiante)
     ciudadEstudiante: CiudadEstudiante[];
 
     constructor(nombre:string, apellido:string, fechaNacimiento: Date){

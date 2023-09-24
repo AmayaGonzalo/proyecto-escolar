@@ -15,10 +15,10 @@ export class Ciudad {
     @OneToMany(()=>Escuela, escuela=>escuela.ciudad)
     public escuelas: Escuela[];
 
-    @OneToMany(()=>CiudadProfesor, ciudad_profesor=>ciudad_profesor.ciudad)
-    public CiudadProfesor : CiudadProfesor[];
+    @OneToMany(()=>CiudadProfesor, ciudadProfesor=>ciudadProfesor.ciudad)
+    public ciudadProfesor : CiudadProfesor[];
 
-    @OneToMany(()=>CiudadEstudiante, ciudadEStudiante=>ciudadEStudiante.ciudades)
+    @OneToMany(()=>CiudadEstudiante, ciudadEStudiante=>ciudadEStudiante.ciudad)
     public ciudadEstudiante : CiudadEstudiante[];
 
 
