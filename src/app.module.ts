@@ -26,7 +26,9 @@ import { EstudianteModule } from './estudiante/estudiante.module';
   EscuelaModule,
   ClasesModule,
   AsistenciaModule,
-  EstudianteModule
+  EstudianteModule,
+  AsistenciaModule
+ 
 ],
   controllers: [AppController],
   providers: [AppService],
