@@ -22,7 +22,7 @@ export class ProfesorService {
     return 'This action adds a new profesor';
   }
 
-  async createDomicilio(body){
+  async createDomicilio(body):Promise<any>{
     const { ciudadId, profesorId, domicilio } = body;
 
     //consultar y verificar si el profesor existe

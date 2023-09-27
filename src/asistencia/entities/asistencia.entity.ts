@@ -6,10 +6,10 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn 
 @Entity({ name: "asistencia" })
 export class Asistencia {
 
-    @PrimaryColumn({name: "estudianteClaseClaseId"})//
+    @PrimaryColumn({name:'estudianteClaseClaseId'})//
     claseId: number;
 
-    @PrimaryColumn({name:"estudianteClaseEstudianteId"})
+    @PrimaryColumn({name:'estudianteClaseEstudianteId'})
     estudianteId: number;
 
     @Column()

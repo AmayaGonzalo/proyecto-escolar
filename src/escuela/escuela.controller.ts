@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EscuelaService } from './escuela.service';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
+import { Escuela } from './entities/escuela.entity';
 
 @Controller('escuela')
 export class EscuelaController {
@@ -12,9 +13,9 @@ export class EscuelaController {
     return this.escuelaService.create(createEscuelaDto);
   }
 
-  @Get()
-  findAll() {
-    return this.escuelaService.findAll();
+  @Get('all')
+  async findAll():Promise<Escuela[]> {
+    return await this.escuelaService.findAll();
   }
 
   @Get(':id')

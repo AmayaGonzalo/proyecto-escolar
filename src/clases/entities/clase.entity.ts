@@ -28,7 +28,7 @@ export class Clase {
     // public estudiantes : Estudiante[];
 
     @OneToMany(()=>EstudianteClase, estudianteClases=> estudianteClases.clase)
-    estudianteClases: EstudianteClase;
+    estudianteClases: EstudianteClase[];
 
     constructor(nombre: string){
         this.nombre = nombre;

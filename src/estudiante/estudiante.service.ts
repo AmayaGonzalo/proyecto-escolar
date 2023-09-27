@@ -63,8 +63,8 @@ export class EstudianteService {
     return await this.estudianteClaseRepository.save(new EstudianteClase(claseId,estudianteId));
   }
 
-  findAll() {
-    return `This action returns all estudiante`;
+  async findAll():Promise<Estudiante[]> {
+    return this.estudianteRepository.find();
   }
 
   findOne(id: number) {

@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EstudianteService } from './estudiante.service';
 import { EstudianteDto } from './dto/create-estudiante.dto';
+import { Estudiante } from './entities/estudiante.entity';
 
 @Controller('estudiante')
 export class EstudianteController {
@@ -22,7 +23,7 @@ export class EstudianteController {
   }
 
   @Get()
-  findAll() {
+  async findAll():Promise<Estudiante[]> {
     return this.estudianteService.findAll();
   }
 

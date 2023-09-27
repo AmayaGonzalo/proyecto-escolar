@@ -13,11 +13,11 @@ export class EstudianteClase{
     estudianteId: number;
 
     @ManyToOne(()=>Clase, clase=> clase.estudianteClases)
-    @JoinColumn()
+    @JoinColumn()//{ name: "fk_id_clase"}
     clase: Clase;
     
     @ManyToOne(()=>Estudiante, estudiante=> estudiante.estudianteClases)
-    @JoinColumn()
+    @JoinColumn()//{ name: "fk_id_estudiante"}
     estudiante: Estudiante;
 
     @OneToMany(()=> Asistencia, asistencias=>asistencias.estudianteClase)

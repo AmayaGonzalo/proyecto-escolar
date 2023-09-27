@@ -27,10 +27,10 @@ export class Estudiante {
     // clases: Clase[];
 
     @OneToMany(()=>CiudadEstudiante, ciudadEstudiante=>ciudadEstudiante.estudiante)
-    ciudadEstudiante: CiudadEstudiante[];
+    public ciudadEstudiante: CiudadEstudiante[];
 
     @OneToMany(()=>EstudianteClase, estudianteClases=> estudianteClases.estudiante)
-    estudianteClases: EstudianteClase[];
+    public estudianteClases: EstudianteClase[];
 
     constructor(nombre:string, apellido:string, fechaNacimiento: Date){
         this.nombre = nombre;
