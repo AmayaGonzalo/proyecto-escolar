@@ -9,7 +9,7 @@ export class Asistencia {
     @PrimaryColumn({name:'estudianteClaseClaseId'})//
     claseId: number;
 
-    @PrimaryColumn({name:'estudianteClaseEstudianteId'})
+    @PrimaryColumn({name:'estudianteClaseEstudianteId'})//
     estudianteId: number;
 
     @Column()
