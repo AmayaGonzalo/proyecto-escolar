@@ -26,7 +26,20 @@ export class CiudadService {
     }
 
     async findAllOrm(): Promise<CiudadDto[]>{
-        return await this.ciudadRepository.find();
+        try{
+            let ciudad: CiudadDto[]=  await this.ciudadRepository.find();
+            if(ciudad){
+                return ciudad;
+            }else{
+                throw new Error('No se encontraron las ciudades');
+            }
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.CONFLICT,
+                error: 'Error en ciudad - ' + error
+            },HttpStatus.NOT_FOUND)
+        }
     }
 
     async findById(id: number) : Promise<CiudadDto>{
@@ -42,7 +55,6 @@ export class CiudadService {
             throw new HttpException({
                 status: HttpStatus.CONFLICT,
                 error: 'Error en ciudad - ' + error
-
             },HttpStatus.NOT_FOUND)
         }
     }
