@@ -18,8 +18,21 @@ export class ProfesorService {
               private readonly ciudadProfesorRepository:Repository<CiudadProfesor>
               ){}
 
-  create(ProfesorDto: ProfesorDto) {
-    return 'This action adds a new profesor';
+  async newProfesor(profesorDto: ProfesorDto):Promise<ProfesorDto> {
+    try{
+      let newProfesor: Profesor = await this.profesorRepository.save(new Profesor(profesorDto.nombre,profesorDto.apellido));
+      if(newProfesor){
+        return profesorDto;
+      }else{
+        throw new Error('No se pudo crear un nuevo profesor');
+      }
+    }catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Profesor - ' + error
+
+      },HttpStatus.NOT_FOUND)
+    }
   }
 
   async createDomicilio(body):Promise<any>{

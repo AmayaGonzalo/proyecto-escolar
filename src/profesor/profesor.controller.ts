@@ -7,14 +7,14 @@ import { UpdateProfesorDto } from './dto/update-profesor.dto';
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
-  @Post()
-  create(@Body() createProfesorDto: ProfesorDto) {
-    return this.profesorService.create(createProfesorDto);
+  @Post('new')
+  async createProfesor(@Body() profesorDto: ProfesorDto):Promise<ProfesorDto>{
+  return await this.profesorService.newProfesor(profesorDto);
   }
 
   @Post('adddomicilio')
   async addDomicilio(@Body() body: any): Promise<any> {
-    return this.profesorService.createDomicilio(body);
+    return await this.profesorService.createDomicilio(body);
   }
 
   @Get()
