@@ -19,8 +19,13 @@ export class AsistenciaController {
   }
 
   @Get('obtener/:id1/:id2')
-  async getIdAsistencia(@Param('id1') id1: number,@Param('id2')id2:number):Promise<Asistencia> {
-    return await this.asistenciaService.findOne(id1,id2);
+  async getIdAsistencia(@Param('id1') id1: number,@Param('id2') id2:number):Promise<any> {
+    return await this.asistenciaService.getAsistenciaEstudianteClase(id1,id2);
+  }
+
+  @Get('obtener/:claseId')
+  async getAsistenciaClase(@Param('claseId') claseId: number):Promise<Asistencia[]>{
+    return await this.asistenciaService.getAsistenciaClase(claseId);
   }
 
   // @Patch(':id')
@@ -28,8 +33,8 @@ export class AsistenciaController {
   //   return this.asistenciaService.update(+id, updateAsistenciaDto);
   // }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.asistenciaService.remove(+id);
-  // }
+  @Delete('borrar/:id1/:id2')  
+  async remove(@Param('id1') id1: number, @Param('id2') id2: number):Promise<any> {
+    return await this.asistenciaService.removeAsistencia(id1, id2);
+  }
 }
