@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profesor } from './entities/profesor.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { Ciudad } from 'src/ciudad/entities/ciudad.entity';
 import { CiudadProfesor } from 'src/ciudad/entities/ciudad_profesor.entity';
 
@@ -46,8 +46,23 @@ export class ProfesorService {
     return `This action returns all profesor`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profesor`;
+  async findOne(id: number):Promise<CreateProfesorDto> {
+    try{
+      let criterio: FindOneOptions ={ where: {id:id} };
+      let profesor: CreateProfesorDto = await this.profesorRepository.findOne(criterio);
+      if(profesor){
+        return profesor;
+      }else{
+        throw new Error('No se encontró el profesor')
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en ciudad - ' + error
+
+      },HttpStatus.NOT_FOUND)
+    }    
   }
 
   update(id: number, updateProfesorDto: UpdateProfesorDto) {

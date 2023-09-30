@@ -23,8 +23,8 @@ export class ProfesorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profesorService.findOne(+id);
+  async getProfesor(@Param('id') id: number):Promise<CreateProfesorDto> {
+    return await this.profesorService.findOne(id);
   }
 
   @Patch(':id')
