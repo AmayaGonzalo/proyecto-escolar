@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
-import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Asistencia } from './entities/asistencia.entity';
 import { FindOneOptions, Repository, getManager } from 'typeorm';

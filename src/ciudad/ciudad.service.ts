@@ -45,7 +45,7 @@ export class CiudadService {
     async findById(id: number) : Promise<CiudadDto>{
         try{
             const criterio: FindOneOptions = { where: {id: id}};
-            let ciudad: CiudadDto = await this.ciudadRepository.findOne( criterio );
+            const ciudad: CiudadDto = await this.ciudadRepository.findOne( criterio );
             if(ciudad)
                 return ciudad;
             else
@@ -61,7 +61,7 @@ export class CiudadService {
 
     async create(ciudadDto: CiudadDto) : Promise<CiudadDto>{
         try{
-            let ciudad : Ciudad = await this.ciudadRepository.save(new Ciudad(ciudadDto.nombre));
+            const ciudad : Ciudad = await this.ciudadRepository.save(new Ciudad(ciudadDto.nombre));
             if(ciudad)
                 return ciudadDto;
             else
@@ -130,7 +130,7 @@ export class CiudadService {
 
     async delete(id: number): Promise<any>{
         try{
-            let criterio : FindOneOptions = { where: { id : id }};
+            const criterio : FindOneOptions = { where: { id : id }};
             let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
             if(!ciudad)
                 throw new Error('No se pudo eliminar la ciudad');

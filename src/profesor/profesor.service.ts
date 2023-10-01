@@ -7,6 +7,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { Ciudad } from 'src/ciudad/entities/ciudad.entity';
 import { CiudadProfesor } from 'src/ciudad/entities/ciudad_profesor.entity';
 
+
 @Injectable()
 export class ProfesorService {
 
@@ -31,28 +32,61 @@ export class ProfesorService {
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
 
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }
   }
 
   async createDomicilio(body):Promise<any>{
-    const { ciudadId, profesorId, domicilio } = body;
+    try{
+      const { ciudadId, profesorId, domicilio } = body;
+      //consultar y verificar si el profesor existe
+      const profesor = await this.profesorRepository.findOne({ where:{ id: profesorId } });
+      if(!profesor)
+        throw new Error('error - no existe el profesor');
+      
+      //consultar y verificar si la ciudad existe
+      const ciudad = await this.ciudadRepository.findOne({ where:{ id: ciudadId}});
+      if(!ciudad)
+        throw new Error('error - no existe esa ciudad');
 
-    //consultar y verificar si el profesor existe
-    const profesor = await this.profesorRepository.findOne({ where:{ id: profesorId } });
-    if(!profesor)
-      return 'error - no existe el profesor';
+      //si el id_profesor y id_ciudad existe dentro de ciudad_profesor(tabla)
+      const newDomicilio = await this.ciudadProfesorRepository.findOne({ where:{ciudadId:ciudadId, profesorId:profesorId}});
+      if(newDomicilio)
+        throw new Error('el profesor ya tiene asignado un domicilio');
+      return await this.ciudadProfesorRepository.save(new CiudadProfesor(ciudadId, profesorId, domicilio));
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Profesor - ' + error
+
+      },HttpStatus.NOT_FOUND);
+    }
     
-    //consultar y verificar si la ciudad existe
-    const ciudad = await this.ciudadRepository.findOne({ where:{ id: ciudadId}});
-    if(!ciudad)
-      return 'error - no existe esa ciudad'
+  }
 
-    //si el id_profesor y id_ciudad existe dentro de ciudad_profesor(tabla)
-    const newDomicilio = await this.ciudadProfesorRepository.findOne({ where:{ciudadId:ciudadId, profesorId:profesorId}});
-    if(newDomicilio)
-      return 'el profesor ya tiene asignado un domicilio';
-    return await this.ciudadProfesorRepository.save(new CiudadProfesor(ciudadId, profesorId, domicilio));
+  async updateDomicilio(body):Promise<any>{
+    try{
+      const { profesorId, ciudadId, domicilio } = body;
+      const profesorCiudad: CiudadProfesor = await this.ciudadProfesorRepository.findOne({ where:{profesorId:profesorId,ciudadId:ciudadId }});      
+      if(!profesorCiudad){
+        throw new Error('No se encontró el domicilio del profesor');
+      }else{
+        const domicilioViejo = profesorCiudad.getDirecccion();
+        if(domicilio !=null || domicilio != undefined){
+          profesorCiudad.setDireccion(domicilio);
+          await this.ciudadProfesorRepository.save(profesorCiudad);
+          return `OK - Se modificó ${domicilioViejo} --> ${profesorCiudad.domicilio}.`;
+        }
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Profesor - ' + error
+
+      },HttpStatus.NOT_FOUND);
+    }
   }
 
   async findAll():Promise<ProfesorDto[]> {
@@ -92,9 +126,28 @@ export class ProfesorService {
     }    
   }
 
+  async getDomicWithProf(id: number): Promise<Profesor>{
+    try{
+      const criterio: FindOneOptions = { where: { id:id }, relations:['ciudadProfesor'] };
+      const profesor:Profesor = await this.profesorRepository.findOne(criterio);
+      if(!profesor){
+        throw new Error('No se encontró el profesor');
+      }else{
+        return profesor;
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Profesor - ' + error
+
+      },HttpStatus.NOT_FOUND);
+    }
+  }
+
   async update(id: number, updateProfesorDto: UpdateProfesorDto):Promise<any> {
     try{
-      let criterio:FindOneOptions = { where: {id:id} };
+      const criterio:FindOneOptions = { where: {id:id} };
       let profesor:Profesor = await this.profesorRepository.findOne(criterio);
       if(!updateProfesorDto){
         throw new Error('No se pudo modificar los datos del profesor');

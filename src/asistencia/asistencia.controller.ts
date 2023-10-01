@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AsistenciaService } from './asistencia.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
-import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { Asistencia } from './entities/asistencia.entity';
 
 @Controller('asistencia')
