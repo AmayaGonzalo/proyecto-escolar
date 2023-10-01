@@ -17,7 +17,7 @@ export class ProfesorService {
               private readonly ciudadRepository:Repository<Ciudad>,
               @InjectRepository(CiudadProfesor)
               private readonly ciudadProfesorRepository:Repository<CiudadProfesor>
-              ){}
+  ){}
 
   async newProfesor(profesorDto: ProfesorDto):Promise<ProfesorDto> {
     try{
@@ -31,7 +31,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND);
     }
   }
@@ -59,7 +58,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND);
     }
     
@@ -102,7 +100,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND)
     }
   }
@@ -121,7 +118,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND)
     }    
   }
@@ -140,7 +136,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND);
     }
   }
@@ -169,7 +164,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND)
     }
   }
@@ -195,7 +189,6 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-
       },HttpStatus.NOT_FOUND)
     }    
   }

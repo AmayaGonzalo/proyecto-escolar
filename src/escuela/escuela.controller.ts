@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { EscuelaService } from './escuela.service';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
@@ -8,9 +8,14 @@ import { Escuela } from './entities/escuela.entity';
 export class EscuelaController {
   constructor(private readonly escuelaService: EscuelaService) {}
 
-  @Post()
-  create(@Body() createEscuelaDto: CreateEscuelaDto) {
-    return this.escuelaService.create(createEscuelaDto);
+  @Post('new')
+  async create(@Body() createEscuelaDto: CreateEscuelaDto):Promise<CreateEscuelaDto> {
+    return await this.escuelaService.create(createEscuelaDto);
+  }
+
+  @Post('addciudad/:ciudadId/:escuelaId')
+  async asinarCiudad(@Param('ciudadId') ciudadId: number,@Param('escuelaId') escuelaId:number):Promise<Escuela>{
+    return await this.escuelaService.asignarCiudadAEscuela(ciudadId,escuelaId);
   }
 
   @Get('all')
@@ -19,13 +24,13 @@ export class EscuelaController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.escuelaService.findOne(+id);
+  async findOne(@Param('id') id: number):Promise<Escuela> {
+    return await this.escuelaService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEscuelaDto: UpdateEscuelaDto) {
-    return this.escuelaService.update(+id, updateEscuelaDto);
+  @Put('update/:id')
+  async update(@Param('id') id: number, @Body() updateEscuelaDto: UpdateEscuelaDto):Promise<any> {
+    return await this.escuelaService.update(id, updateEscuelaDto);
   }
 
   @Delete(':id')

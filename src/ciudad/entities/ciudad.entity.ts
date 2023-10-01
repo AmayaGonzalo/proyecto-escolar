@@ -36,6 +36,5 @@ export class Ciudad {
 
     public setNombre(nombre: string): void{
         this.nombre = nombre;
-    }
-    
+    }    
 }

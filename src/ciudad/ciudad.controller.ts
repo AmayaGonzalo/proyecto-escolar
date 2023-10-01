@@ -37,5 +37,4 @@ export class CiudadController {
     async eliminarCiudad(@Param('id') id: number): Promise<any>{
         return await this.ciudadService.delete(id);
     }
-
 }

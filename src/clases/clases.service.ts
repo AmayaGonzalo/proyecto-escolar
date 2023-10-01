@@ -70,13 +70,14 @@ export class ClasesService {
       if(clase){
         clase.setNombre(claseDto.getNombre());
         clase = await this.claseRepository.save(clase);
-        if(clase)
+        if(clase){
           return `Se reemplazó: ${nombreViejo} --> ${clase.getNombre()}`;
-        else 
+        }else{
           return `No se pudo reemplazar`;
+        }
+      }else{
+        throw new Error('No se encontró la clase para modificar');
       }
-      else
-        throw new Error('No se encontró la clase para modificar');           
     }
     catch(error){
       throw new HttpException({
