@@ -33,8 +33,8 @@ export class EscuelaController {
     return await this.escuelaService.update(id, updateEscuelaDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.escuelaService.remove(+id);
+  @Delete('delete/:id')
+  async remove(@Param('id') id: number):Promise<any> {
+    return await this.escuelaService.remove(id);
   }
 }

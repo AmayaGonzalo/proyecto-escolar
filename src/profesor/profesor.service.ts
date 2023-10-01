@@ -149,11 +149,11 @@ export class ProfesorService {
       }else{
         let nombreViejo = profesor.getNombre();
         let apellidoViejo = profesor.getApellido();
-        if(nombreViejo != null || nombreViejo != undefined){
+        if(updateProfesorDto.nombre != null || updateProfesorDto.nombre != undefined){
           profesor.setNombre(updateProfesorDto.nombre);
           profesor = await this.profesorRepository.save(profesor);      
         }
-        if(apellidoViejo != null || apellidoViejo != undefined){
+        if(updateProfesorDto.apellido != null || updateProfesorDto.apellido != undefined){
           profesor.setApellido(updateProfesorDto.apellido);
           profesor = await this.profesorRepository.save(profesor);
         }

@@ -110,7 +110,25 @@ constructor(@InjectRepository(Escuela)
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} escuela`;
-  }
+  async remove(id: number):Promise<any> {
+    try{
+      const criterio: FindOneOptions = { where:{ id:id} };
+      let escuela:Escuela = await this.escuelaRepository.findOne(criterio);
+      if(!escuela){
+        throw new Error('No se encuentra esa escuela');
+      }else{
+        await this.escuelaRepository.remove(escuela);
+        return {
+          message: "Se ha eliminado exitosamente",
+          nombre: escuela.getNombre()
+        }
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+          error: 'Error en Escuela - ' + error
+        },HttpStatus.NOT_FOUND);
+    }
+  }    
 }

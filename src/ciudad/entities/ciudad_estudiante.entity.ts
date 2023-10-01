@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 import { Estudiante } from "src/estudiante/entities/estudiante.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Ciudad } from "./ciudad.entity";
 
 @Entity({ name: "ciudad_estudiante" })
