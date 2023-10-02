@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { EscuelaService } from './escuela.service';
-import { CreateEscuelaDto } from './dto/create-escuela.dto';
+import { EscuelaDto } from './dto/escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
 import { Escuela } from './entities/escuela.entity';
 
@@ -9,7 +9,7 @@ export class EscuelaController {
   constructor(private readonly escuelaService: EscuelaService) {}
 
   @Post('new')
-  async create(@Body() createEscuelaDto: CreateEscuelaDto):Promise<CreateEscuelaDto> {
+  async create(@Body() createEscuelaDto: EscuelaDto):Promise<EscuelaDto> {
     return await this.escuelaService.create(createEscuelaDto);
   }
 

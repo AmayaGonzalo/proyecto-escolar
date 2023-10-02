@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
+import { AsistenciaDto } from './dto/asistencia.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Asistencia } from './entities/asistencia.entity';
-import { FindOneOptions, Repository, getManager } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { EstudianteClase } from 'src/estudiante/entities/estudianteClase.entity';
 import { EntityManager } from 'typeorm';
 import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
@@ -25,15 +25,25 @@ export class AsistenciaService {
   {}
 
 
-  async create(createAsistenciaDto: CreateAsistenciaDto) {
+  async create(asistenciaDto: AsistenciaDto):Promise<AsistenciaDto> {
     try{
-      const { estudianteId, claseId } = createAsistenciaDto;
-      const asistenciaEstudiante = await this.estudianteClaseRepository.findOne({ where:{estudianteId:estudianteId, claseId:claseId} });
-      if(!asistenciaEstudiante){
-        throw new Error('No se pudo asignar la asistencia');
+      const { estudianteId, claseId } = asistenciaDto;
+      const estudiante : Estudiante = await this.estudianteRepository.findOne({where:{id:estudianteId}});4
+      if(!estudiante){
+        throw new Error('No se encontró ese estudiante');
       }else{
-        return await this.asistenciaRepository.save(new Asistencia(claseId, estudianteId, new Date() ));
-      }
+        const clase:Clase = await this.claseRepository.findOne({where:{id:claseId}});
+        if(!clase){
+          throw new Error('No se encontró esa clase');
+        }else{
+          const estudianteClase:EstudianteClase = await this.estudianteClaseRepository.findOne({ where:{estudianteId:estudianteId, claseId:claseId} });
+          if(!estudianteClase){
+            throw new Error('El estudiante no esta asignado a esa clase, primero debes asignarlo');
+          }else{
+            return await this.asistenciaRepository.save(new Asistencia(claseId, estudianteId, new Date() ));
+          }
+        }
+      }      
     }
     catch(error){
       throw new HttpException({
@@ -65,7 +75,7 @@ export class AsistenciaService {
           if(asistencia){
             return asistencia;
           }else{
-            throw new Error('Oopss ocurrió un error inesperado');
+            throw new Error('Oopss el estudiante no posee asistencia');
           }         
         } 
       }         
@@ -120,19 +130,28 @@ export class AsistenciaService {
     }
   }
 
-  async removeAsistencia(estudianteId:number, claseId:number):Promise<any>{
+  async removeAsistencia(body):Promise<any>{
     try{
-      let criterio : FindOneOptions = { where: { estudianteId:estudianteId, claseId:claseId } };
-      let asistencia: Asistencia = await this.asistenciaRepository.findOne(criterio);
-      if(!asistencia){
-        throw new Error('No se halló la asistencia del estudiante');        
+      const { estudianteId, claseId } = body;
+      const estudiante: Estudiante = await this.estudianteRepository.findOne({where:{id:estudianteId}});
+      if(!estudiante){
+        throw new Error('No existe ese estudiante');
       }else{
-        await this.asistenciaRepository.remove(asistencia);
-        return{                
-          message: 'se ha eliminado exitosamente'
+        const clase:Clase = await this.claseRepository.findOne({where:{id:claseId}});
+        if(!clase){
+          throw new Error('Es clase no existe');
+        }else{
+          const asistencia: Asistencia = await this.asistenciaRepository.findOne({where:{claseId:claseId, estudianteId:estudianteId}});
+          if(!asistencia){
+            throw new Error('El estudiante no posee ninguna asistencia en esa clase');
+          }else{
+            await this.asistenciaRepository.remove(asistencia);
+            return 'Se ha eliminado la asistencia con éxito';
+          }
         }
       }
-    }catch(error){
+    }
+    catch(error){
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Asistencia - ' + error  

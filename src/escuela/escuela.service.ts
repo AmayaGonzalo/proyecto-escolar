@@ -1,5 +1,5 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
-import { CreateEscuelaDto } from './dto/create-escuela.dto';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { EscuelaDto } from './dto/escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Escuela } from './entities/escuela.entity';
@@ -34,7 +34,7 @@ constructor(@InjectRepository(Escuela)
     }
   }
 
-  async create(createEscuelaDto: CreateEscuelaDto):Promise<CreateEscuelaDto> {
+  async create(createEscuelaDto: EscuelaDto):Promise<EscuelaDto> {
     try{
       let newEscuela: Escuela= await this.escuelaRepository.save(new Escuela(createEscuelaDto.nombre,createEscuelaDto.domicilio));
       if(newEscuela){
