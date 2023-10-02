@@ -18,6 +18,11 @@ export class EscuelaController {
     return await this.escuelaService.asignarCiudadAEscuela(ciudadId,escuelaId);
   }
 
+  @Post('addclase')
+  async asignarClase(@Body() body):Promise<Escuela>{
+    return await this.escuelaService.asignarClase(body);
+  }
+
   @Get('all')
   async findAll():Promise<Escuela[]> {
     return await this.escuelaService.findAll();

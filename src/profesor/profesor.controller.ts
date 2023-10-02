@@ -33,6 +33,11 @@ export class ProfesorController {
     return await this.profesorService.createDomicilio(body);
   }
 
+  @Post('addclase')
+  async asignarClase(@Body() body:any):Promise<any>{
+    return await this.profesorService.asignarClase(body);
+  }
+
   @Put('update/:id')
   async updateProfesor(@Param('id') id: number, @Body() updateProfesorDto: UpdateProfesorDto):Promise<any> {
     return await this.profesorService.update(id, updateProfesorDto);

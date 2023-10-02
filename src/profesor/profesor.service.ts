@@ -6,6 +6,7 @@ import { Profesor } from './entities/profesor.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { Ciudad } from 'src/ciudad/entities/ciudad.entity';
 import { CiudadProfesor } from 'src/ciudad/entities/ciudad_profesor.entity';
+import { Clase } from 'src/clases/entities/clase.entity';
 
 
 @Injectable()
@@ -16,7 +17,9 @@ export class ProfesorService {
               @InjectRepository(Ciudad)
               private readonly ciudadRepository:Repository<Ciudad>,
               @InjectRepository(CiudadProfesor)
-              private readonly ciudadProfesorRepository:Repository<CiudadProfesor>
+              private readonly ciudadProfesorRepository:Repository<CiudadProfesor>,
+              @InjectRepository(Clase)
+              private readonly claseRepository:Repository<Clase>
   ){}
 
   async newProfesor(profesorDto: ProfesorDto):Promise<ProfesorDto> {
@@ -53,6 +56,32 @@ export class ProfesorService {
       if(newDomicilio)
         throw new Error('el profesor ya tiene asignado un domicilio');
       return await this.ciudadProfesorRepository.save(new CiudadProfesor(ciudadId, profesorId, domicilio));
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Profesor - ' + error
+      },HttpStatus.NOT_FOUND);
+    }    
+  }
+
+  async asignarClase(body): Promise<any>{
+    try{
+      const { profesorId, claseId } = body;
+      let profesor: Profesor = await this.profesorRepository.findOne({where:{id:profesorId}});
+      if(!profesor){
+        throw new Error('No se encontró el profesor');
+      }else{
+        let clase: Clase = await this.claseRepository.findOne({where:{id:claseId}});
+        if(!clase){
+          throw new Error('No se encontró la clase');
+        }else{
+          clase.profesor = profesor; // Asignamos a la clase el profesor a través de foreign key, es decir cargamos una foreign key
+          await this.claseRepository.save(clase);
+          return clase;
+        }
+      }
+
     }
     catch(error){
       throw new HttpException({

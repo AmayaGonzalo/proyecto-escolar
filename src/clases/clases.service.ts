@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { EstudianteClase } from 'src/estudiante/entities/estudianteClase.entity';
+import { ClaseDto } from './dto/clase.dto';
 
 @Injectable()
 export class ClasesService {
@@ -79,13 +80,13 @@ export class ClasesService {
     }
   }
 
-  async update(id: number, claseDto: Clase):Promise<String> {
+  async update(id: number, claseDto: ClaseDto):Promise<String> {
     try{
       const criterio : FindOneOptions = { where: { id : id }};
       let clase : Clase = await this.claseRepository.findOne(criterio);
       let nombreViejo = clase.getNombre();
       if(clase){
-        clase.setNombre(claseDto.getNombre());
+        clase.setNombre(claseDto.nombre);
         clase = await this.claseRepository.save(clase);
         if(clase){
           return `Se reemplazó: ${nombreViejo} --> ${clase.getNombre()}`;

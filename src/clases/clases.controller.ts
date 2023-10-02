@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common'
 import { ClasesService } from './clases.service';
 import { Clase } from './entities/clase.entity';
 import { EstudianteClase } from 'src/estudiante/entities/estudianteClase.entity';
+import { ClaseDto } from './dto/clase.dto';
 
 @Controller('clases')
 export class ClasesController {
@@ -29,8 +30,8 @@ export class ClasesController {
   }
 
   @Put('actualizar/:id')
-  async actualizarClase(@Body() clase: Clase, @Param('id')id: number):Promise<String>{
-    return await this.clasesService.update(id, clase);
+  async actualizarClase(@Body() claseDto: ClaseDto, @Param('id')id: number):Promise<String>{
+    return await this.clasesService.update(id, claseDto);
   }
 
   @Delete('eliminar/:id')

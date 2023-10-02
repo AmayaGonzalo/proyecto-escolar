@@ -1,17 +1,20 @@
-import { HttpException, HttpStatus, Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Escuela } from './entities/escuela.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { Ciudad } from 'src/ciudad/entities/ciudad.entity';
+import { Clase } from 'src/clases/entities/clase.entity';
 
 @Injectable()
 export class EscuelaService {
 constructor(@InjectRepository(Escuela)
             private readonly escuelaRepository:Repository<Escuela>,
             @InjectRepository(Ciudad)
-            private readonly ciudadRepository:Repository<Ciudad>
+            private readonly ciudadRepository:Repository<Ciudad>,
+            @InjectRepository(Clase)
+            private readonly claseRepository:Repository<Clase>
   ){}
 
   async findAll(): Promise<Escuela[]>{
@@ -46,7 +49,41 @@ constructor(@InjectRepository(Escuela)
         error: 'Error en Escuela - ' + error
       },HttpStatus.NOT_FOUND);
     }   
-  }  
+  }
+  
+  async asignarClase(body):Promise<Escuela>{
+    try{
+      const { escuelaId, claseId } = body;
+      let escuela: Escuela = await this.escuelaRepository.findOne({where:{id:escuelaId}});
+      if(!escuela){
+        throw new Error('No se encontró la escuela');
+      }else{
+        const clase: Clase = await this.claseRepository.findOne({ where: {id: claseId}});
+        if(!clase){
+          throw new Error('No se encontró la clase a asignar');
+        }else{
+          clase.escuela = escuela; // Asignamos la ciudad a la escuela a través de foreign key, es decir cargamos una foreign key
+          await this.claseRepository.save(clase);
+          escuela = await this.escuelaRepository
+          .createQueryBuilder('escuela')
+          .leftJoinAndSelect('escuela.clases', 'clase')
+          .where('escuela.id = :escuelaId', { escuelaId })
+          .getOne();
+          if (!escuela) {
+            throw new NotFoundException('No se encontró la escuela!.');
+          }else{
+            return escuela;
+          }
+        }
+      }
+    }
+    catch(error){     
+        throw new HttpException({
+          status: HttpStatus.CONFLICT,
+          error: 'Error en Escuela - ' + error
+        },HttpStatus.NOT_FOUND);      
+    }
+  }
 
   async asignarCiudadAEscuela(ciudadId:number, escuelaId:number):Promise<Escuela>{
     try{
