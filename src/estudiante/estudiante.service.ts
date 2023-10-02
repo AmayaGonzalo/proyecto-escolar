@@ -156,6 +156,28 @@ export class EstudianteService {
     }
   }
 
+  async getEstudianteDireccionConCiudad(estudianteId:number):Promise<Estudiante>{
+    try{
+      const estudiante:Estudiante = await this.estudianteRepository
+      .createQueryBuilder('estudiante')
+      .leftJoinAndSelect('estudiante.ciudadEstudiante','ciudadEstudiante')
+      .leftJoinAndSelect('ciudadEstudiante.ciudad','ciudad')
+      .where('estudiante.id = :estudianteId', { estudianteId })
+      .getOne();
+      if(estudiante){
+        return estudiante;
+      }else{
+        throw new Error ('No se encontró el estudiante');
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+          error: 'Error en Estudiante - ' + error
+        },HttpStatus.NOT_FOUND);
+    }
+  }
+
   async update(id: number, estudianteDto: EstudianteDto):Promise<EstudianteDto> {
     try{
       let estudiante: Estudiante = await this.estudianteRepository.findOne({where:{id:id}});

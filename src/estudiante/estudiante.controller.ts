@@ -37,6 +37,11 @@ export class EstudianteController {
     return await this.estudianteService.findOne(id);
   }
 
+  @Get('datoscompletos/:id')
+  async getComplete(@Param('id') id : number):Promise<Estudiante>{
+    return await this.estudianteService.getEstudianteDireccionConCiudad(id);
+  }
+
   @Put('update/:id')
   async update(@Param('id') id: number, @Body() estudianteDto: EstudianteDto): Promise<EstudianteDto> {
     return await this.estudianteService.update(id, estudianteDto);

@@ -65,5 +65,4 @@ export class Estudiante {
     public setFechaNacimiento(fechaNacimiento: Date): void{
         this.fechaNacimiento = fechaNacimiento;
     }
-
 }
