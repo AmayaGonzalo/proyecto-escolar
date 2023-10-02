@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
 import { FindOneOptions, Repository } from 'typeorm';
@@ -64,24 +64,19 @@ export class ClasesService {
         error: 'Error en la clase - ' + error
     },HttpStatus.NOT_FOUND);
     }
-  }
+  }  
 
-  async findOne(id: number):Promise<Clase> {
-    try{
-      const criterio: FindOneOptions = { where: { id : id}, relations: ['estudiantes'] };
-      let clase : Clase = await this.claseRepository.findOne(criterio);
-
-      if(clase)
+  async findOneWithEstudiantes(id: number): Promise<Clase> {
+    try {
+      const clase = await this.claseRepository.findOne({where:{id:id}, relations: ['estudianteClases.estudiante'] });
+      if (!clase) {
+        throw new NotFoundException('No se encontró esa clase.');
+      }else{
         return clase;
-      else
-        throw new Error('No se encuentra la clase');
+      }      
+    }catch(error){
+      throw new NotFoundException('Error en la clase - ' + error.message);
     }
-    catch(error){
-      throw new HttpException({
-          status: HttpStatus.CONFLICT,
-          error: 'Error en la clase - ' + error
-      },HttpStatus.NOT_FOUND);
-    }    
   }
 
   async update(id: number, claseDto: Clase):Promise<String> {

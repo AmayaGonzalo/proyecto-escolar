@@ -20,7 +20,7 @@ export class ClasesController {
 
   @Get('obtener/:id')
   async buscarId(@Param('id') id: number): Promise<Clase>{
-    return await this.clasesService.findOne(id);
+    return await this.clasesService.findOneWithEstudiantes(id);
   }
 
   @Post('crear')

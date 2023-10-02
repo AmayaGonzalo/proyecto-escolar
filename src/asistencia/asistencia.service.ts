@@ -102,9 +102,6 @@ export class AsistenciaService {
       },HttpStatus.NOT_FOUND);
     }
   }
-
-
-
       
   async findAll():Promise<Asistencia[]> {
     try{
