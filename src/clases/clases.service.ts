@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { Estudiante } from 'src/estudiante/entities/estudiante.entity';
 import { EstudianteClase } from 'src/estudiante/entities/estudianteClase.entity';
 
 @Injectable()
@@ -12,14 +11,14 @@ export class ClasesService {
               private readonly claseRepository: Repository<Clase>,
               @InjectRepository(EstudianteClase)
               private readonly estudianteClaseRepository: Repository<EstudianteClase>
-    ){}
+  ){}
 
 
   async create(claseDto: Clase): Promise<Clase>{
     // let clase: Clase = new Clase(claseDto.nombre);
     // await this.claseRepository.save(clase);
     try{
-      let clase : Clase = await this.claseRepository.save(new Clase(claseDto.nombre));//lo mismo que las dos lineas comentadas de arriba
+      const clase : Clase = await this.claseRepository.save(new Clase(claseDto.nombre));//lo mismo que las dos lineas comentadas de arriba
       if(clase)
         return clase;
     else
@@ -29,23 +28,47 @@ export class ClasesService {
       throw new HttpException({
           status: HttpStatus.CONFLICT,
           error: 'Error en la clase - ' + error
-
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }     
   }
 
   async findAll(): Promise<Clase[]> {
-    return await this.claseRepository.find({ relations : ['profesor'] })
+    try{
+      const clase: Clase[] = await this.claseRepository.find({ relations : ['profesor'] });
+      if(clase){
+        return clase;
+      }else{
+        throw new Error('No se encontró la lista de clases');
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en la clase - ' + error
+    },HttpStatus.NOT_FOUND);
+    }    
   }
 
   async findAllwithRelations():Promise<EstudianteClase[]>{
-    return await this.estudianteClaseRepository.find({relations : ['clase', 'estudiante']});
-
+    try{
+      const estudianteClase: EstudianteClase[] = await this.estudianteClaseRepository.find({relations : ['clase', 'estudiante']});
+      if(estudianteClase){
+        return estudianteClase;
+      }else{
+        throw new Error('No se encontró la lista de clases con sus datos completos.');
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en la clase - ' + error
+    },HttpStatus.NOT_FOUND);
+    }
   }
 
-  async findOne(id: number) {
+  async findOne(id: number):Promise<Clase> {
     try{
-      let criterio: FindOneOptions = { where: { id : id}, relations: ['estudiantes'] };
+      const criterio: FindOneOptions = { where: { id : id}, relations: ['estudiantes'] };
       let clase : Clase = await this.claseRepository.findOne(criterio);
 
       if(clase)
@@ -57,12 +80,11 @@ export class ClasesService {
       throw new HttpException({
           status: HttpStatus.CONFLICT,
           error: 'Error en la clase - ' + error
-
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }    
   }
 
-  async update(id: number, claseDto: Clase) {
+  async update(id: number, claseDto: Clase):Promise<String> {
     try{
       const criterio : FindOneOptions = { where: { id : id }};
       let clase : Clase = await this.claseRepository.findOne(criterio);
@@ -83,7 +105,6 @@ export class ClasesService {
       throw new HttpException({
           status: HttpStatus.CONFLICT,
           error: 'Error en la clase - ' + error
-
       },HttpStatus.NOT_FOUND)
     }     
   }
@@ -108,7 +129,7 @@ export class ClasesService {
           status: HttpStatus.CONFLICT,
           error: 'Error en la clase - ' + error
 
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }       
   }
 }

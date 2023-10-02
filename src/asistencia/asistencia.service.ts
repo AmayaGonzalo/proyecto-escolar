@@ -39,7 +39,7 @@ export class AsistenciaService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Asistencia - ' + error  
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }   
   }
 
@@ -74,7 +74,7 @@ export class AsistenciaService {
       throw new HttpException({
           status: HttpStatus.CONFLICT,
           error: 'Error en Asistencia - ' + error  
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }
   }
 
@@ -99,7 +99,7 @@ export class AsistenciaService {
       throw new HttpException({
           status: HttpStatus.CONFLICT,
           error: 'Error en Asistencia - ' + error  
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }
   }
 
@@ -119,7 +119,7 @@ export class AsistenciaService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Asistencia - ' + error  
-    },HttpStatus.NOT_FOUND)
+    },HttpStatus.NOT_FOUND);
     }
   }
 
@@ -139,7 +139,7 @@ export class AsistenciaService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Asistencia - ' + error  
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }
   }
 

@@ -59,8 +59,7 @@ export class ProfesorService {
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
       },HttpStatus.NOT_FOUND);
-    }
-    
+    }    
   }
 
   async updateDomicilio(body):Promise<any>{
@@ -100,7 +99,7 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }
   }
 
@@ -118,7 +117,7 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }    
   }
 
@@ -164,7 +163,7 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }
   }
 
@@ -189,7 +188,7 @@ export class ProfesorService {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'Error en Profesor - ' + error
-      },HttpStatus.NOT_FOUND)
+      },HttpStatus.NOT_FOUND);
     }    
   }
 }

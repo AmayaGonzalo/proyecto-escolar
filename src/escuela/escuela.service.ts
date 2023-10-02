@@ -15,7 +15,20 @@ constructor(@InjectRepository(Escuela)
   ){}
 
   async findAll(): Promise<Escuela[]>{
-    return await this.escuelaRepository.find({ relations: ['ciudad']});
+    try{
+      const escuela: Escuela[] = await this.escuelaRepository.find({ relations: ['ciudad']});
+      if(escuela){
+        return escuela;
+      }else{
+        throw new Error ('No se halló la lista de escuelas');
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'Error en Escuela - ' + error
+      },HttpStatus.NOT_FOUND);
+    }
   }
 
   async create(createEscuelaDto: CreateEscuelaDto):Promise<CreateEscuelaDto> {

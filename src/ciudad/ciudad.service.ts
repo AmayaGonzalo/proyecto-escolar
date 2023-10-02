@@ -15,14 +15,26 @@ export class CiudadService {
     ){}
 
     async findAllRaw(): Promise<CiudadDto[]>{
-        this.ciudades = [];
-        let datos = await this.ciudadRepository.query("select * from ciudad");
-
-        datos.forEach(element => {
-            let ciudad : Ciudad = new Ciudad(element['nombre']);
-            this.ciudades.push(ciudad)
-        });
-        return this.ciudades;
+        try{
+            this.ciudades = [];
+            let datos = await this.ciudadRepository.query("select * from ciudad");    
+            datos.forEach(element => {
+                let ciudad : Ciudad = new Ciudad(element['nombre']);
+                this.ciudades.push(ciudad);
+            });
+            if(!datos){
+                throw new Error('No se encontraron las ciudades');
+            }else{
+                return this.ciudades;
+            }           
+        }
+        catch(error){
+            throw new HttpException({
+                status: HttpStatus.CONFLICT,
+                error: 'Error en ciudad - ' + error
+            },HttpStatus.NOT_FOUND);
+        }
+       
     }
 
     async findAllOrm(): Promise<CiudadDto[]>{
@@ -38,7 +50,7 @@ export class CiudadService {
             throw new HttpException({
                 status: HttpStatus.CONFLICT,
                 error: 'Error en ciudad - ' + error
-            },HttpStatus.NOT_FOUND)
+            },HttpStatus.NOT_FOUND);
         }
     }
 
@@ -71,8 +83,7 @@ export class CiudadService {
             throw new HttpException({
                 status: HttpStatus.CONFLICT,
                 error: 'Error en ciudad - ' + error
-
-            },HttpStatus.NOT_FOUND)
+            },HttpStatus.NOT_FOUND);
         }
     }
 
@@ -98,25 +109,12 @@ export class CiudadService {
             if(!ciudad)
                 throw new Error('No se pudo encontrar la ciudad a modificar');        
             else{
-                let ciudadVieja = ciudad.getNombre();   //guarda en la variable ciudadVieja el nombre de "Río Grande"   
-                // let habitantesViejo = ciudad.getHabitantes(); //guarda en la variable habitantesViejo los habitantes de "Río Grande"               
+                let ciudadVieja = ciudad.getNombre();   //guarda en la variable ciudadVieja el nombre de "Río Grande"                 
                 if(ciudadDto.nombre != null || ciudadDto.nombre != undefined){
                     ciudad.setNombre(ciudadDto.nombre);     //Cambia el nombre por "Mar del Plata"
                     ciudad = await this.ciudadRepository.save(ciudad);  //guarda el nombre "Mar del Plata en la Base de datos"
                     return `OK - ${ciudadVieja} --> ${ciudadDto.nombre}`;
-                }
-                // if(ciudadDto.habitantes != null || ciudadDto.habitantes != undefined){
-                //     ciudad.setHabitantes(ciudadDto.habitantes);     //Cambia habitantes por "12000"
-                //     ciudad = await this.ciudadRepository.save(ciudad);  //guarda habitantes "12000" en la Base de datos"
-                //     return `OK - ${habitantesViejo} --> ${ciudadDto.habitantes}`;
-                // }
-                // if((ciudadDto.nombre != null || ciudadDto.nombre != undefined) && (ciudadDto.habitantes != null || ciudadDto.habitantes != undefined)){
-                //     ciudad.setNombre(ciudadDto.nombre);     //Cambia el nombre por "Mar del Plata"
-                //     ciudad.setHabitantes(ciudadDto.habitantes);     //Cambia habitantes por "12000"
-                //     ciudad = await this.ciudadRepository.save(ciudad);  //guarda el nombre "Mar del Plata en la Base de datos"
-                //     ciudad = await this.ciudadRepository.save(ciudad);  //guarda habitantes "12000" en la Base de datos"
-                //     return `OK - ${ciudadVieja} --> ${ciudadDto.nombre} |--| ${habitantesViejo} --> ${ciudadDto.habitantes}`;
-                // }                  
+                }                            
             }            
         }
         catch(error){
@@ -124,7 +122,7 @@ export class CiudadService {
                 status: HttpStatus.CONFLICT,
                 error: 'Error en ciudad - ' + error
 
-            },HttpStatus.NOT_FOUND)
+            },HttpStatus.NOT_FOUND);
         }        
     }
 
@@ -148,7 +146,7 @@ export class CiudadService {
                 status: HttpStatus.CONFLICT,
                 error: 'Error en ciudad - ' + error
 
-            },HttpStatus.NOT_FOUND)
+            },HttpStatus.NOT_FOUND);
         }
     }
 
