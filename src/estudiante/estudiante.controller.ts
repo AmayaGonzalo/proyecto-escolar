@@ -42,8 +42,8 @@ export class EstudianteController {
     return await this.estudianteService.update(id, estudianteDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.estudianteService.remove(+id);
+  @Delete('delete/:id')
+  async remove(@Param('id') id: number):Promise<any> {
+    return await this.estudianteService.remove(id);
   }
 }

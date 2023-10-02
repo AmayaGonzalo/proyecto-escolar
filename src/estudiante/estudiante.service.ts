@@ -37,36 +37,36 @@ export class EstudianteService {
             status: HttpStatus.CONFLICT,
             error: 'Error en estudiante - ' + error
   
-        },HttpStatus.NOT_FOUND)
-      }  
+        },HttpStatus.NOT_FOUND);
     }  
-
-    //ver el id harcodeado
-  // async createConRelation(estudianteDto: EstudianteDto):Promise<boolean>{
-  //   const clase:Clase= await this.claseRepository.findOne({ where: {id : 1 } });
-  //   let estudiante:Estudiante = new Estudiante(estudianteDto.nombre, estudianteDto.apellido, estudianteDto.fechaNacimiento);
-  //   if(clase)
-  //     estudiante.clases = [clase];
-  //     await this.estudianteRepository.save(estudiante);
-  //   if(estudiante)
-  //     return true;
-  //   else
-  //     return false;
-  // }
+  }  
 
   async addClase(body):Promise<any>{
-    const { claseId, estudianteId } = body;
-
-    const estudiante: Estudiante = await this.estudianteRepository.findOne({ where: {id: estudianteId}});
-    if(!estudiante)
-      return `Error - No se encontró el estudiante con el Id ${estudianteId}`;
-    const clase = await this.claseRepository.findOne({ where:{ id: claseId}});
-    if(!clase)
-      return 'Error - No se encontró la clase';
-    const claseEstudiante = await this.estudianteClaseRepository.findOne({ where: { claseId:claseId, estudianteId:estudianteId}});
-    if(claseEstudiante)
-      return 'Error - El estudiante ya tiene asignada esa clase';
-    return await this.estudianteClaseRepository.save(new EstudianteClase(claseId,estudianteId));
+    try{
+      const { claseId, estudianteId } = body;
+      const estudiante: Estudiante = await this.estudianteRepository.findOne({ where: {id: estudianteId}});
+      if(!estudiante){
+        return `Error - No se encontró el estudiante con el Id ${estudianteId}`;
+      }else{
+        const clase = await this.claseRepository.findOne({ where:{ id: claseId}});
+        if(!clase){
+          return 'Error - No se encontró la clase';
+        }else{
+          const claseEstudiante = await this.estudianteClaseRepository.findOne({ where: { claseId:claseId, estudianteId:estudianteId}});
+          if(claseEstudiante){
+            return 'Error - El estudiante ya tiene asignada esa clase';
+          }else{
+            return await this.estudianteClaseRepository.save(new EstudianteClase(claseId,estudianteId));
+          }          
+        }       
+      }      
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+          error: 'Error en Estudiante - ' + error
+        },HttpStatus.NOT_FOUND);
+    }    
   }
 
   async createDomicilio(body):Promise<any>{
@@ -122,7 +122,20 @@ export class EstudianteService {
   }
 
   async findAll():Promise<Estudiante[]> {
-    return this.estudianteRepository.find();
+    try{
+      const estudiante:Estudiante[] = await this.estudianteRepository.find();
+      if(estudiante){
+        return estudiante;
+      }else{
+        throw new Error ('No se hallaron los estudiantes');
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+          error: 'Error en Estudiante - ' + error
+        },HttpStatus.NOT_FOUND);
+    }    
   }
 
   async findOne(id: number):Promise<Estudiante> {
@@ -172,7 +185,27 @@ export class EstudianteService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} estudiante`;
+  async remove(id: number):Promise<any> {
+    try{
+      const criterio: FindOneOptions = { where:{ id:id } };
+      const estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
+      if(estudiante){
+        await this.estudianteRepository.remove(estudiante);
+        return {
+                message: "Se eliminó:",
+                id: estudiante.id,
+                nombre: estudiante.nombre,
+                apellido: estudiante.apellido,
+                }
+      }else{
+        throw new Error('No se encontró el estudiante a eliminar');
+      }
+    }
+    catch(error){
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+          error: 'Error en Estudiante - ' + error
+        },HttpStatus.NOT_FOUND);
+    }
   }
 }
